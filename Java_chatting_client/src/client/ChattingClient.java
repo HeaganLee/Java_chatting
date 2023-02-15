@@ -64,7 +64,7 @@ public class ChattingClient extends JFrame {
 		contentPane.add(loginpanel, "name_999600029531900");
 		loginpanel.setLayout(null);
 		
-		ImageIcon imgTest = new ImageIcon("..\\images\\kakao2.png"); 
+		ImageIcon imgTest = new ImageIcon("images\\kakao2.png"); 
 		Image img = imgTest.getImage();
 		Image changeImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
 		ImageIcon changeIcon = new ImageIcon(changeImg);
@@ -79,7 +79,7 @@ public class ChattingClient extends JFrame {
 		loginpanel.add(textField);
 		textField.setColumns(10);
 		
-		ImageIcon startimg = new ImageIcon("C:\\Users\\qusei\\OneDrive\\바탕 화면\\kakaostart.png"); 
+		ImageIcon startimg = new ImageIcon("images\\kakaostart.png"); 
 		Image img2 = startimg.getImage();
 		Image changeImg2 = img2.getScaledInstance(251, 50, Image.SCALE_SMOOTH);
 		ImageIcon changeIcon2 = new ImageIcon(changeImg2);
@@ -101,7 +101,7 @@ public class ChattingClient extends JFrame {
 		panel.setLayout(null);
 		
 		
-		ImageIcon kakaoimg = new ImageIcon("C:\\Users\\qusei\\OneDrive\\바탕 화면\\kakao2.png"); 
+		ImageIcon kakaoimg = new ImageIcon("images\\kakao2.png"); 
 		Image img3 = kakaoimg.getImage();
 		Image listkakao = img3.getScaledInstance(90, 72, Image.SCALE_SMOOTH);
 		ImageIcon listkakaoc = new ImageIcon(listkakao);
@@ -110,7 +110,7 @@ public class ChattingClient extends JFrame {
 		kakaolabel.setBounds(0, 0, 90, 72);
 		panel.add(kakaolabel);
 			
-		ImageIcon kakaop = new ImageIcon("C:\\Users\\qusei\\OneDrive\\바탕 화면\\kakaoplus.png"); 
+		ImageIcon kakaop = new ImageIcon("images\\kakaoplus.png"); 
 		Image img4 = kakaop.getImage();
 		Image kakaopl = img4.getScaledInstance(90, 72, Image.SCALE_SMOOTH);
 		ImageIcon kakaoplus = new ImageIcon(kakaopl);
@@ -139,7 +139,7 @@ public class ChattingClient extends JFrame {
 		
 		
 		
-		ImageIcon kakaoimg2 = new ImageIcon("C:\\Users\\qusei\\OneDrive\\바탕 화면\\kakao2.png"); 
+		ImageIcon kakaoimg2 = new ImageIcon("images\\kakao2.png"); 
 		Image img5 = kakaoimg.getImage();
 		Image listkakao2 = img5.getScaledInstance(94, 84, Image.SCALE_SMOOTH);
 		ImageIcon kakao2 = new ImageIcon(listkakao2);
@@ -147,7 +147,7 @@ public class ChattingClient extends JFrame {
 		label.setBounds(0, 0, 94, 84);
 		panel_1.add(label);
 		
-		ImageIcon out = new ImageIcon("C:\\Users\\qusei\\OneDrive\\바탕 화면\\out.png"); 
+		ImageIcon out = new ImageIcon("images\\out.png"); 
 		Image out2 = out.getImage();
 		Image outL = out2.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 		ImageIcon outIcon = new ImageIcon(outL);
@@ -155,7 +155,7 @@ public class ChattingClient extends JFrame {
 		outLabel.setBounds(377, 10, 67, 63);
 		panel_1.add(outLabel);
 		
-		ImageIcon input = new ImageIcon("C:\\Users\\qusei\\OneDrive\\바탕 화면\\enter.png"); 
+		ImageIcon input = new ImageIcon("images\\enter.png"); 
 		Image input1 = input.getImage();
 		Image input2 = input1.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 		ImageIcon enterIcon = new ImageIcon(input2);
