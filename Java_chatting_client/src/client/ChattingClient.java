@@ -64,7 +64,7 @@ public class ChattingClient extends JFrame {
 		contentPane.add(loginpanel, "name_999600029531900");
 		loginpanel.setLayout(null);
 		
-		ImageIcon imgTest = new ImageIcon("images\\kakao2.png"); 
+		ImageIcon imgTest = new ImageIcon("..\\images\\kakao2.png"); 
 		Image img = imgTest.getImage();
 		Image changeImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
 		ImageIcon changeIcon = new ImageIcon(changeImg);
