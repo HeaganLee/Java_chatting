@@ -7,5 +7,6 @@ import lombok.Data;
 @Data
 public class CreateRoomReqDto {
 	private String roomname;
+	private String kinuser;
 
 }

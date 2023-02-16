@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,11 +71,16 @@ class ConnectedSocket extends Thread{
 						roomname = createRoomReqDto.getRoomname();
 						List<String> createdRooms = new ArrayList<>();
 						
+						username = createRoomReqDto.getKinuser();
+						List<String> kingusers = new ArrayList<>();
+						
 						for(ConnectedSocket connectedSocket : socketList) {
 							createdRooms.add(connectedSocket.getRoomname());
 						}
 						
-						CreateRoomRespDto createRoomRespDto = new CreateRoomRespDto(roomname + "생성됨", createdRooms);
+						kingusers.add(username);
+						
+						CreateRoomRespDto createRoomRespDto = new CreateRoomRespDto(roomname + "생성됨", createdRooms, kingusers);
 						
 						sendToAll(reqDto.getResource(), "ok", gson.toJson(createRoomRespDto));
 						break;
@@ -102,6 +108,14 @@ class ConnectedSocket extends Thread{
 			
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			if(socket != null) {
+				try {
+					socket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		
 	}
