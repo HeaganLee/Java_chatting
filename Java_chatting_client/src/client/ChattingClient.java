@@ -6,12 +6,16 @@ import java.awt.Image;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import lombok.Getter;
+
 import java.awt.CardLayout;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import java.awt.Dimension;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -22,16 +26,23 @@ import javax.swing.JTextArea;
 import java.awt.Button;
 import java.awt.Label;
 import java.awt.Font;
+@Getter
 
 public class ChattingClient extends JFrame {
+	private static ChattingClient instance;
+	
+	public static ChattingClient getInstance() {
+		if (instance == null) {
+			instance = new ChattingClient();
+		}
+		return instance;
+	}
 
 	private JPanel contentPane;
-	private Image kakao;
-	private int w;
-	private int h;
 	private JTextField textField;
 	private JTextField inputChatting;
-	
+	private JList<String> roomList;
+	private DefaultListModel<String> roomListModel;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
