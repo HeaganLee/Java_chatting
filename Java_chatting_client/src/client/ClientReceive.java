@@ -32,7 +32,7 @@ public class ClientReceive extends Thread {
 			switch(respDto.getResource()) {
 				case "join" :
 					JoinRespDto joinRespDto = gson.fromJson(respDto.getBody(), JoinRespDto.class);
-					
+					// ChattingClient.getInstance().getRoomListModel().addAll(null);
 			}
 			
 			}
