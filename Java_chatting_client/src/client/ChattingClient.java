@@ -6,6 +6,12 @@ import java.awt.Image;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.google.gson.Gson;
+
+import dto.JoinReqDto;
+import dto.ReqDto;
+
 import java.awt.CardLayout;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -17,19 +23,37 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import java.awt.Button;
 import java.awt.Label;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 
 public class ChattingClient extends JFrame {
-
+	private static  ChattingClient instance;
+	
+	public static ChattingClient getInstance() {
+		if(instance == null) {
+			instance = new ChattingClient();
+		}
+		return instance;
+	}
+	
+	private Socket socket;
+	private Gson gson;
+	private String username;
+	
+	private CardLayout mainCard;
 	private JPanel contentPane;
-	private Image kakao;
-	private int w;
-	private int h;
-	private JTextField textField;
+	private JTextField usernameField;
 	private JTextField inputChatting;
 	
 	
@@ -37,6 +61,8 @@ public class ChattingClient extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					
+					
 					ChattingClient frame = new ChattingClient();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -50,6 +76,8 @@ public class ChattingClient extends JFrame {
 	 * Create the frame.
 	 */
 	public ChattingClient() {
+		gson = new Gson();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 480, 800);
 		contentPane = new JPanel();
@@ -57,7 +85,8 @@ public class ChattingClient extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
-		contentPane.setLayout(new CardLayout(0, 0));
+		mainCard = new CardLayout();
+		contentPane.setLayout(mainCard);
 		
 		JPanel loginpanel = new JPanel();
 		loginpanel.setBackground(new Color(255, 235, 59));
@@ -69,24 +98,57 @@ public class ChattingClient extends JFrame {
 		Image changeImg = img.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
 		ImageIcon changeIcon = new ImageIcon(changeImg);
 		
-		JLabel lblNewLabel = new JLabel(changeIcon);
-		lblNewLabel.setBackground(new Color(242, 242, 0));
-		lblNewLabel.setBounds(177, 251, 100, 66);
-		loginpanel.add(lblNewLabel);
+		JLabel KakaoLabel = new JLabel(changeIcon);
+		KakaoLabel.setBackground(new Color(242, 242, 0));
+		KakaoLabel.setBounds(177, 251, 100, 66);
+		loginpanel.add(KakaoLabel);
 		
-		textField = new JTextField();
-		textField.setBounds(95, 344, 251, 32);
-		loginpanel.add(textField);
-		textField.setColumns(10);
+		usernameField = new JTextField();
+		usernameField.setBounds(95, 344, 251, 32);
+		loginpanel.add(usernameField);
+		usernameField.setColumns(10);
 		
 		ImageIcon startimg = new ImageIcon("images\\kakaostart.png"); 
 		Image img2 = startimg.getImage();
 		Image changeImg2 = img2.getScaledInstance(251, 50, Image.SCALE_SMOOTH);
 		ImageIcon changeIcon2 = new ImageIcon(changeImg2);
 		
-		JButton btnNewButton = new JButton(changeIcon2);
-		btnNewButton.setBounds(95, 396, 251, 32);
-		loginpanel.add(btnNewButton);
+		JButton inButton = new JButton(changeIcon2);
+		inButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String ip = "127.0.0.1";
+				int port = 9090;
+				
+				try {
+					socket = new Socket(ip, port);
+					
+					JOptionPane.showMessageDialog(null,"헬톡에 오신걸 환영합니다.",
+							usernameField.getText() + "환영합니다.", JOptionPane.INFORMATION_MESSAGE);
+					
+					// 유저이름과 join 요청
+					username = usernameField.getText();
+					JoinReqDto joinReqDto = new JoinReqDto(username);
+					String joinReqDtoJson = gson.toJson(joinReqDto);
+					ReqDto reqDto = new ReqDto("join", joinReqDtoJson);
+					String reqDtoJson = gson.toJson(reqDto);
+					
+					OutputStream outputStream = socket.getOutputStream();
+					PrintWriter out = new PrintWriter(outputStream, true);
+					out.println(reqDtoJson);
+					
+					mainCard.show(contentPane, "chatListScroll");
+					
+				} catch (UnknownHostException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		inButton.setBounds(95, 396, 251, 32);
+		loginpanel.add(inButton);
 		
 		JScrollPane chatListScroll = new JScrollPane();
 		contentPane.add(chatListScroll, "name_1000424702831000");
