@@ -30,7 +30,7 @@ public class ChattingClient extends JFrame {
 	private int w;
 	private int h;
 	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField inputChatting;
 	
 	
 	public static void main(String[] args) {
@@ -120,22 +120,22 @@ public class ChattingClient extends JFrame {
 		addLabel.setBounds(25, 82, 37, 29);
 		panel.add(addLabel);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(new Color(255, 235, 59));
-		contentPane.add(panel_1, "name_1002260299991800");
-		panel_1.setLayout(null);
+		JPanel chattingPanel = new JPanel();
+		chattingPanel.setBackground(new Color(255, 235, 59));
+		contentPane.add(chattingPanel, "name_1002260299991800");
+		chattingPanel.setLayout(null);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(0, 83, 456, 606);
-		panel_1.add(scrollPane);
+		JScrollPane chatScroll = new JScrollPane();
+		chatScroll.setBounds(0, 83, 456, 606);
+		chattingPanel.add(chatScroll);
 		
 		JTextArea textArea = new JTextArea();
-		scrollPane.setViewportView(textArea);
+		chatScroll.setViewportView(textArea);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(0, 689, 388, 64);
-		panel_1.add(textField_1);
-		textField_1.setColumns(10);
+		inputChatting = new JTextField();
+		inputChatting.setBounds(0, 689, 388, 64);
+		chattingPanel.add(inputChatting);
+		inputChatting.setColumns(10);
 		
 		
 		
@@ -143,30 +143,30 @@ public class ChattingClient extends JFrame {
 		Image img5 = kakaoimg.getImage();
 		Image listkakao2 = img5.getScaledInstance(94, 84, Image.SCALE_SMOOTH);
 		ImageIcon kakao2 = new ImageIcon(listkakao2);
-		JLabel label = new JLabel(kakao2);
-		label.setBounds(0, 0, 94, 84);
-		panel_1.add(label);
+		JLabel chattingPannelLabel = new JLabel(kakao2);
+		chattingPannelLabel.setBounds(0, 0, 94, 84);
+		chattingPanel.add(chattingPannelLabel);
 		
 		ImageIcon out = new ImageIcon("images\\out.png"); 
 		Image out2 = out.getImage();
 		Image outL = out2.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 		ImageIcon outIcon = new ImageIcon(outL);
-		JLabel outLabel = new JLabel(outIcon);
-		outLabel.setBounds(377, 10, 67, 63);
-		panel_1.add(outLabel);
+		JLabel chatOut = new JLabel(outIcon);
+		chatOut.setBounds(377, 10, 67, 63);
+		chattingPanel.add(chatOut);
 		
 		ImageIcon input = new ImageIcon("images\\enter.png"); 
 		Image input1 = input.getImage();
 		Image input2 = input1.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 		ImageIcon enterIcon = new ImageIcon(input2);
-		JButton btnNewButton_1 = new JButton(enterIcon);
-		btnNewButton_1.setBounds(387, 689, 69, 64);
-		panel_1.add(btnNewButton_1);
+		JButton trsanportButton = new JButton(enterIcon);
+		trsanportButton.setBounds(387, 689, 69, 64);
+		chattingPanel.add(trsanportButton);
 		
-		JLabel lblNewLabel_1 = new JLabel("김동민님의 방입니다");
-		lblNewLabel_1.setFont(new Font("굴림", Font.PLAIN, 15));
-		lblNewLabel_1.setBounds(106, 26, 236, 32);
-		panel_1.add(lblNewLabel_1);
+		JLabel chattingRoomName = new JLabel("김동민님의 방입니다");
+		chattingRoomName.setFont(new Font("굴림", Font.PLAIN, 15));
+		chattingRoomName.setBounds(106, 26, 236, 32);
+		chattingPanel.add(chattingRoomName);
 		
 		
 	}
