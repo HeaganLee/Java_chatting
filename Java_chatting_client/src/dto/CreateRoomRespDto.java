@@ -10,5 +10,5 @@ import lombok.Data;
 public class CreateRoomRespDto {
 	private String createRoomMessage;
 	private List<String> createdRoom;
-
+	private List<String> kingUsers;
 }
