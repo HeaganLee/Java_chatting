@@ -10,5 +10,5 @@ import lombok.Data;
 public class JoinRoomRespDto {
 	private String welcomeRoomMessage;
 	private List<String> connectedRoomUsers;
-
+	private List<String> createdRooms1;
 }
