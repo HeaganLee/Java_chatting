@@ -1,5 +1,9 @@
 package dto;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -9,4 +13,5 @@ import lombok.Data;
 public class ExitRoomRespDto {
 	private String outMessage;
 	private String roomname;
+	private List<String> roomlist;
 }

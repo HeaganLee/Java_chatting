@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 public class JoinRoomRespDto {
 	private String welcomeRoomMessage;
-	private List<String> connectedRoomUsers;
+	private String connectedRoomUsers;
+	private String roomname;
 
 }

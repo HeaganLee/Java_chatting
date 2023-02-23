@@ -186,9 +186,7 @@ public class ChattingClient extends JFrame {
 					
 					try {
 						
-						createdRoom(roomname);
-						
-							
+						createdRoom(roomname);	
 						outputStream = socket.getOutputStream();
 						PrintWriter out1 = new PrintWriter(outputStream, true);
 						
@@ -252,6 +250,7 @@ public class ChattingClient extends JFrame {
 	            } catch (IOException e1) {
 	               e1.printStackTrace();
 	            }
+	            
 	            mainCard.show(contentPane, roomname);
 	            
 	            
@@ -298,7 +297,7 @@ public class ChattingClient extends JFrame {
         contentView = new JTextArea();
         chatScroll.setViewportView(contentView);
         contentView.setEditable(false);
-        
+ 
         inputChatting = new JTextField();
         inputChatting.addKeyListener(new KeyAdapter() {      
            @Override
