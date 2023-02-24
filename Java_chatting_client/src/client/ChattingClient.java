@@ -328,7 +328,6 @@ public class ChattingClient extends JFrame {
         chatOut.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseClicked(MouseEvent e) {
-        		
         	
         		try {
         			ExitRoomReqDto exitRoomReqDto = new ExitRoomReqDto(username, roomname);

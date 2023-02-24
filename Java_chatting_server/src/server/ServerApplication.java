@@ -44,6 +44,7 @@ class ConnectedSocket extends Thread{
 	private String joineduser;
 	private static List<String> createdRooms = new ArrayList<>();
 	private static List<Room> roomList = new ArrayList<>();
+	private static List<String> rcUser = new ArrayList<>();
 	public ConnectedSocket(Socket socket) {
 		this.socket = socket;
 		gson = new Gson();
@@ -56,7 +57,9 @@ class ConnectedSocket extends Thread{
 		try {
 			inputStream = socket.getInputStream();
 			BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+			CreateRoomRespDto createRoomRespDto;
 			
+			ExitRoomRespDto exitRoomRespDto;
 			Set<String> createdRoomsSet;
 			while(true) {
 				String reuest = in.readLine();
@@ -77,7 +80,6 @@ class ConnectedSocket extends Thread{
 						for(Room r : roomList) {
 							createdRooms.add(r.getRoomName());
 						}
-						System.out.println("조인할때" + createdRooms);
 						
 						createdRoomsSet = new LinkedHashSet<>(createdRooms); // LinkedHashSet은 순서를 유지합니다.
 						createdRooms.clear();
@@ -93,7 +95,6 @@ class ConnectedSocket extends Thread{
 						
 						roomname = createRoomReqDto.getRoomname();
 						System.out.println(roomname);
-						
 						kinguser = createRoomReqDto.getKinguser();
 						System.out.println(kinguser);
 						
@@ -102,8 +103,10 @@ class ConnectedSocket extends Thread{
 						room.setRoomName(roomname);
 						room.addUser(kinguser);
 						
-						roomList.add(room);
+						createRoomRespDto = new CreateRoomRespDto(roomname, kinguser, createdRooms);
 						
+						
+						roomList.add(room);
 						createdRooms.clear();
 						for(Room r: roomList) {
 							createdRooms.add(r.getRoomName());
@@ -111,13 +114,9 @@ class ConnectedSocket extends Thread{
 						System.out.println("방만들때" + createdRooms);
 						createdRoomsSet = new LinkedHashSet<>(createdRooms); // LinkedHashSet은 순서를 유지합니다.
 						createdRooms.clear();
-						createdRooms.addAll(createdRoomsSet);						
-			
-						CreateRoomRespDto createRoomRespDto = new CreateRoomRespDto(roomname + "생성됨",kinguser, createdRooms);
-						
+						createdRooms.addAll(createdRoomsSet);
+						System.out.println("룸접속" + rcUser);
 						sendToAll(reqDto.getResource(), "ok", gson.toJson(createRoomRespDto));
-						
-					
 						break;
 						
 					case "joinroom":
@@ -136,6 +135,7 @@ class ConnectedSocket extends Thread{
 						System.out.println(roomList);
 						
 						JoinRoomRespDto joinRoomRespDto = new JoinRoomRespDto(joineduser +"님이 방에 들어옴", joineduser, roomname);
+						sendToUser("goRoom", "ok", gson.toJson(joinRoomRespDto),joineduser);
 						sendToRoom(reqDto.getResource(), "ok", gson.toJson(joinRoomRespDto),joinRoomRespDto.getRoomname());
 						break;
 						
@@ -150,38 +150,41 @@ class ConnectedSocket extends Thread{
 						ExitRoomReqDto exitRoomReqDto = gson.fromJson(reqDto.getBody(), ExitRoomReqDto.class);
 						String exituser = exitRoomReqDto.getUsername();
 						String exitroom = exitRoomReqDto.getRoomname();
-						
 						System.out.println("삭제전 룸리스트" + roomList);
 						
 						for (Room r : roomList) {
 							if(r.getRoomName().equals(exitroom)) {
 								if(r.getKingUser().equals(exituser)) {
+									exitRoomRespDto = new ExitRoomRespDto(exituser + "님이 나감", exitroom, createdRooms);
+									NotsendToKing("getOut", "ok", gson.toJson(exitRoomRespDto),exitroom, exituser);
 									roomList.remove(r);
-									System.out.println(createdRooms);
-									System.out.println("삭제후 룸리스트" + roomList);
+									
+									createdRooms.clear();
+									for(Room rs : roomList) {
+										createdRooms.add(rs.getRoomName());
+									}
+									createdRoomsSet = new LinkedHashSet<>(createdRooms); // LinkedHashSet은 순서를 유지합니다.
+									createdRooms.clear();
+									createdRooms.addAll(createdRoomsSet);
+									
+									exitRoomRespDto = new ExitRoomRespDto(exituser + "님이 나감", exitroom, createdRooms);
+									sendToAll(reqDto.getResource(), "ok", gson.toJson(exitRoomRespDto));
+									sendToRoom("getOut", "ok", gson.toJson(exitRoomRespDto),exitroom);
 									break;
-								}
-								else {
-									r.removeUser(exituser);
-									System.out.println("삭제후 룸리스트" + roomList);
-									break;
+									
+							}else {
+								exitRoomRespDto = new ExitRoomRespDto(exituser + "님이 나감", exitroom, createdRooms);
+								sendToRoom("sendOutRoomMg", "ok", gson.toJson(exitRoomRespDto), exitroom);
+								r.removeUser(exituser);
+								System.out.println("삭제후 룸리스트" + roomList);
+								
+								break;
 								}
 							}
 						}
 						
-						createdRooms.clear();
-						for(Room r : roomList) {
-							createdRooms.add(r.getRoomName());
-						}
 						
-						createdRoomsSet = new LinkedHashSet<>(createdRooms); // LinkedHashSet은 순서를 유지합니다.
-						createdRooms.clear();
-						createdRooms.addAll(createdRoomsSet);
 						
-						System.out.println("삭제후 룸 리스트" + createdRooms);
-						
-						ExitRoomRespDto exitRoomRespDto = new ExitRoomRespDto(exituser + "님이 나감", exitroom, createdRooms);
-						sendToAll(reqDto.getResource(), "ok", gson.toJson(exitRoomRespDto));
 					}
 				}
 			
@@ -190,6 +193,7 @@ class ConnectedSocket extends Thread{
 		} 
 		
 	}
+	
 	private void sendToAll(String resource, String status, String body) throws IOException {
 		RespDto respDto = new RespDto(resource, status, body);
 		for(ConnectedSocket connectedSocket : socketList) {
@@ -200,34 +204,49 @@ class ConnectedSocket extends Thread{
 		}
 	}
 	
-	
-	
-	private void sendToAll(String resource, String status, String body, String roomname) throws IOException {
+	private void sendToNotConnectedUser(String resource, String status, String body, List<String> rcUser) throws IOException {
 		RespDto respDto = new RespDto(resource, status, body);
-		
 		for(ConnectedSocket connectedSocket : socketList) {
+			for(String ru : rcUser) {
+				if(ru.equals(connectedSocket.getUsername())) {
+					continue;
+				}
+			}
 			OutputStream outputStream = connectedSocket.getSocket().getOutputStream();
 			PrintWriter out = new PrintWriter(outputStream, true);
 			out.println(gson.toJson(respDto));
 		}
-		
+	}
+	
+	private void sendToRoom(String resource, String status, String body, String roomname) throws IOException {
+		RespDto respDto = new RespDto(resource, status, body);
 		for(ConnectedSocket connectedSocket : socketList) {
 			if(connectedSocket.getRoomname().equals(roomname)) {
 				OutputStream outputStream = connectedSocket.getSocket().getOutputStream();
 				PrintWriter out = new PrintWriter(outputStream, true);
+				
 				out.println(gson.toJson(respDto));
 			}
 			
 		}
-		
-		
-		
 	}
-	
-	private void sendToRoom(String resource, String status, String body, String roomnmae) throws IOException {
+	private void sendToUser(String resource, String status, String body, String username) throws IOException {
 		RespDto respDto = new RespDto(resource, status, body);
 		for(ConnectedSocket connectedSocket : socketList) {
-			if(connectedSocket.getRoomname().equals(roomname)) {
+			if(connectedSocket.getUsername().equals(username)) {
+				OutputStream outputStream = connectedSocket.getSocket().getOutputStream();
+				PrintWriter out = new PrintWriter(outputStream, true);
+				
+				out.println(gson.toJson(respDto));
+			}
+			
+		}
+	}
+	
+	private void NotsendToKing(String resource, String status, String body,String room,String king) throws IOException {
+		RespDto respDto = new RespDto(resource, status, body);
+		for(ConnectedSocket connectedSocket : socketList) {
+			if(connectedSocket.getRoomname().equals(roomname) && !connectedSocket.getUsername().equals(king)) {
 				OutputStream outputStream = connectedSocket.getSocket().getOutputStream();
 				PrintWriter out = new PrintWriter(outputStream, true);
 				

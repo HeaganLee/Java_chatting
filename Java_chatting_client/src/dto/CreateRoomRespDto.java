@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 // 생성된 룸을 리스트로 받는 역할을 함
 public class CreateRoomRespDto {
-	private String welcomMessage;
+	private String roomname;
 	private String kinguser;
 	private List<String> createdRooms;
 	
